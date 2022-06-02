@@ -30,7 +30,7 @@ def Feature_engineering(location):
     return df
 
 
-def feature_engineering_job():
+def feature_engineering_job(location):
 
     os.environ['MLFLOW_TRACKING_URI'] = "http://0.0.0.0:8000"
     os.environ['MLFLOW_TRACKING_USERNAME'] = "Pablo"
@@ -40,19 +40,30 @@ def feature_engineering_job():
 
     with mlflow.start_run() as run:
 
-        dataFrame = Feature_engineering(location="/Users/salv91/Desktop/mlflow_artifactRoot/mlruns/1/dd03e24808ee404296c929ee7c13a63b/artifacts/Raw_Data/Raw_Data_ek43an8g.csv")
+        df = Feature_engineering(location=location)
 
-        temp = tempfile.NamedTemporaryFile(prefix="Feature_Data_", suffix=".csv")
-        temp_name = temp.name
+        temp_dir = tempfile.gettempdir()
+        new_data = f"{temp_dir}" + "/features_data.csv"
 
         try:
-            dataFrame.to_csv(temp_name, index=False)
-            mlflow.log_artifact(temp_name, "Feature_Data")
+            df.to_csv(new_data, index=False)
+            mlflow.log_artifact(new_data, "Features_Data")
         finally:
-            temp.close()  # Delete the temp file
+            pass
+            # tempfile.close()  # Delete the temp file
 
-        # print info run
+        # Print Info Run
+
         run_id = run.info.run_id
+        artifact_uri = run.info.artifact_uri
         mlflow.set_tag("run_id", run_id)
+        mlflow.set_tag("artifact_uri", artifact_uri)
+
+        s = f"{artifact_uri}/" + f"Features_Data/" + "features_data.csv"
+
         print(run.info)
+
+        print(s)
         mlflow.end_run()
+
+        return s

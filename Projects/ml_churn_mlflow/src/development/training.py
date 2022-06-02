@@ -11,7 +11,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 
 
-def training_job():
+def training_job(location):
 
     os.environ['MLFLOW_TRACKING_URI'] = "http://0.0.0.0:8000"
     os.environ['MLFLOW_TRACKING_USERNAME'] = "Pablo"
@@ -23,7 +23,7 @@ def training_job():
     with mlflow.start_run(run_name="Training") as run:
         # consume features
 
-        df = pd.read_csv("/Users/salv91/Desktop/mlflow_artifactRoot/mlruns/2/f458ae6da86f4003bfdd93625c7d466f/artifacts/Feature_Data/Feature_Data_7k92zmiz.csv", na_values=["n.a.", "?", "NA", "n/a", "na", "--", "nan"], index_col=False)
+        df = pd.read_csv(location, na_values=["n.a.", "?", "NA", "n/a", "na", "--", "nan"], index_col=False)
 
         # Train/test Split
 

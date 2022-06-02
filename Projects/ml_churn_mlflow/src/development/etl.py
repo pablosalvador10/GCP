@@ -6,13 +6,11 @@ import tempfile
 ############################################
 
 
-def etl_job():
 
-    conn_params_dic = {
-        "host"      : "localhost",
-        "database"  : "bank_raw_data",
-        "user"      : "mlflow_user"
-    }
+
+
+def etl_job(params):
+
 
     os.environ['MLFLOW_TRACKING_URI'] = "http://0.0.0.0:8000"
     os.environ['MLFLOW_TRACKING_USERNAME'] = "Pablo"
@@ -23,7 +21,7 @@ def etl_job():
 
     with mlflow.start_run() as run:
 
-        connection = p_sql.connect(conn_params_dic)
+        connection = p_sql.connect(params)
 
         column_names = ['CLIENTNUM', 'Attrition_Flag', 'Customer_Age', 'Gender',
                         'Dependent_count', 'Education_Level', 'Marital_Status',
@@ -37,17 +35,28 @@ def etl_job():
 
         df = p_sql.query_read(connection, column_names=column_names, table_name=table_name)
 
-        temp = tempfile.NamedTemporaryFile(prefix="Raw_Data_", suffix=".csv")
-        temp_name = temp.name
+        temp_dir = tempfile.gettempdir()
+        new_data = f"{temp_dir}" + "/raw_data.csv"
 
         try:
-            df.to_csv(temp_name, index=False)
-            mlflow.log_artifact(temp_name, "Raw_Data")
+            df.to_csv(new_data, index=False)
+            mlflow.log_artifact(new_data, "Raw_Data")
         finally:
-            temp.close()  # Delete the temp file
+            pass
+            #tempfile.close()  # Delete the temp file
 
-        # print info run
+        # Print Info Run
+
         run_id = run.info.run_id
+        artifact_uri = run.info.artifact_uri
         mlflow.set_tag("run_id", run_id)
+        mlflow.set_tag("artifact_uri", artifact_uri)
+
+        s = f"{artifact_uri}/" + f"Raw_Data/" + "raw_data.csv"
+
         print(run.info)
+        print(s)
         mlflow.end_run()
+
+
+        return s
