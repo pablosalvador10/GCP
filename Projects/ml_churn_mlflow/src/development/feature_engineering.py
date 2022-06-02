@@ -44,7 +44,7 @@ def feature_engineering_job(location):
 
         temp_dir = tempfile.gettempdir()
         new_data = f"{temp_dir}" + "/features_data.csv"
-
+        print(temp_dir)
         try:
             df.to_csv(new_data, index=False)
             mlflow.log_artifact(new_data, "Features_Data")
@@ -57,13 +57,13 @@ def feature_engineering_job(location):
         run_id = run.info.run_id
         artifact_uri = run.info.artifact_uri
         mlflow.set_tag("run_id", run_id)
+        mlflow.set_tag("raw_data", location)
         mlflow.set_tag("artifact_uri", artifact_uri)
 
         s = f"{artifact_uri}/" + f"Features_Data/" + "features_data.csv"
 
-        print(run.info)
-
-        print(s)
+        #print(run.info)
+        #print(s)
         mlflow.end_run()
 
         return s

@@ -47,5 +47,5 @@ def registering_job():
         # print info run
         run_id = run.info.run_id
         mlflow.set_tag("run_id", run_id)
-        print(run.info)
+        #print(run.info)
         mlflow.end_run()

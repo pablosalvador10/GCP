@@ -54,8 +54,8 @@ def etl_job(params):
 
         s = f"{artifact_uri}/" + f"Raw_Data/" + "raw_data.csv"
 
-        print(run.info)
-        print(s)
+        #print(run.info)
+        #print(s)
         mlflow.end_run()
 
 
