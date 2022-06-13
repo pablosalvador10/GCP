@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 COPY . /app
-COPY Projects/ml_churn_mlflow/src/data /app
+COPY /Users/pablosalvador/Desktop/GCP/Projects/ml_churn_mlflow/src/data /app
 # Install pip requirements
 
 RUN python -m pip install -r requirements.txt
