@@ -1,5 +1,5 @@
 mlflow 
-skelearn
+sklearn
 pickle
 pandas
 seaborn
