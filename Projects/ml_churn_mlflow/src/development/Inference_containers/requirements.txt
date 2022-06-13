@@ -1,6 +1,6 @@
-mlflow 
 sklearn
 pickle
 pandas
+matplotlib
 seaborn
 numpy
