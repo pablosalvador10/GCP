@@ -1,5 +1,4 @@
 sklearn
-pickle
 pandas
 matplotlib
 seaborn
